@@ -20,19 +20,13 @@ device_provider = new DeviceProvider(server_config , function(error, connected){
 }),
 
 apns_options = {
-    cert: 'assets/PushNotCert.pem',   
-    certData: null,                  
-    key:  'assets/PushNotKey.pem',   
-    keyData: null,    
+    cert: 'assets/PushNotCert.pem',       
+    key:  'assets/PushNotKey.pem', 
     passphrase: 'aptan',
-    ca: null,
-    pfx: null,
-    pfxData: null,
     gateway: 'gateway.sandbox.push.apple.com',
     port: 2195,
     rejectUnauthorized: true,
     enhanced: true,
-    errorCallback: undefined,
     cacheLength: 100,
     autoAdjustCache: true,
     connectionTimeout: 0
