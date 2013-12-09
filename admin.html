@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Push Notification</title>
+    <style>
+      h2{
+        margin-left: 20px;
+      }
+      form{
+        margin-left: 20px;
+
+      }
+      input, button{
+        display: block;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Send notification to all devices</h2>
+    <form>
+      <label>Valid in hours:</label>
+      <input type="text" name="expire"/>
+      <label>Badge:</label>
+      <input type="text" name="badge"/>
+      <label>Body:</label>
+      <input type="text" name="message"/>
+      <label>Action key:</label>
+      <input type="text" name="key"/>
+      <label>Launch image:</label>
+      <input type="text" name="image"/>
+      <label>Sound:</label>
+      <input type="text" name="sound"/>
+      <label>Payload:</label>
+      <button id="btn" type="button">Add field</button>
+      <div id="payloadFields"></div>
+      <input type="submit" value="Submit">
+      </div>
+    </form>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script>
+      $.fn.objectify = function(){
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+          if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+              o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+          }else{
+            o[this.name] = this.value || '';
+          }
+        });
+        return o;
+      };
+      $(function() {
+        var counter = 0;
+        $('#btn').click(function(){
+          ++counter;
+          $('#payloadFields').append('<input type="text" name="payload' + counter + '"/>')});
+        });
+        $('form').submit(function(evt){
+          evt.preventDefault();
+          var _formdata = JSON.stringify($('form').objectify());
+          $.ajax({
+            type: 'POST',
+            url: '/setNotification',
+            dataType: 'json',
+            data: _formdata,
+            success: function(data, textStatus, jqXHR){
+              console.log('Success: ', data.success);
+
+            },
+            error: function(jqXHR, textStatus, error){
+              console.log('Error: ', error)
+            }
+        });
+      });
+    </script>
+  </body>
+</html>
